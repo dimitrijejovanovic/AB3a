@@ -1,0 +1,12 @@
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\bin\Debug\netcoreapp2.0\AB3.deps.json
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\bin\Debug\netcoreapp2.0\AB3.runtimeconfig.json
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\bin\Debug\netcoreapp2.0\AB3.runtimeconfig.dev.json
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\bin\Debug\netcoreapp2.0\AB3.dll
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\bin\Debug\netcoreapp2.0\AB3.pdb
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.csprojResolveAssemblyReference.cache
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.csproj.CoreCompileInputs.cache
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.AssemblyInfoInputs.cache
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.AssemblyInfo.cs
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.dll
+c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.pdb
