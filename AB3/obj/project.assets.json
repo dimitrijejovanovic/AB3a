@@ -13116,7 +13116,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dimitrije.jovanovic\\.nuget\\packages\\": {},
+    "C:\\Users\\Dimitrije Jovanovic\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -13125,17 +13125,17 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "c:\\users\\dimitrije.jovanovic\\documents\\visual studio 2017\\Projects\\AB3\\AB3\\AB3.csproj",
+      "projectUniqueName": "C:\\Users\\Dimitrije Jovanovic\\Documents\\Visual Studio 2017\\Projects\\AB3Auth\\AB3a\\AB3\\AB3.csproj",
       "projectName": "AB3",
-      "projectPath": "c:\\users\\dimitrije.jovanovic\\documents\\visual studio 2017\\Projects\\AB3\\AB3\\AB3.csproj",
-      "packagesPath": "C:\\Users\\dimitrije.jovanovic\\.nuget\\packages\\",
-      "outputPath": "c:\\users\\dimitrije.jovanovic\\documents\\visual studio 2017\\Projects\\AB3\\AB3\\obj\\",
+      "projectPath": "C:\\Users\\Dimitrije Jovanovic\\Documents\\Visual Studio 2017\\Projects\\AB3Auth\\AB3a\\AB3\\AB3.csproj",
+      "packagesPath": "C:\\Users\\Dimitrije Jovanovic\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dimitrije Jovanovic\\Documents\\Visual Studio 2017\\Projects\\AB3Auth\\AB3a\\AB3\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\dimitrije.jovanovic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Dimitrije Jovanovic\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

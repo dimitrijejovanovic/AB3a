@@ -10,3 +10,15 @@ c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\D
 c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.AssemblyInfo.cs
 c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.dll
 c:\users\dimitrije.jovanovic\documents\visual studio 2017\Projects\AB3\AB3\obj\Debug\netcoreapp2.0\AB3.pdb
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\bin\Debug\netcoreapp2.0\AB3.deps.json
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\bin\Debug\netcoreapp2.0\AB3.runtimeconfig.json
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\bin\Debug\netcoreapp2.0\AB3.runtimeconfig.dev.json
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\bin\Debug\netcoreapp2.0\AB3.dll
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\bin\Debug\netcoreapp2.0\AB3.pdb
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\AB3.csprojResolveAssemblyReference.cache
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\AB3.csproj.CoreCompileInputs.cache
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\AB3.AssemblyInfoInputs.cache
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\AB3.AssemblyInfo.cs
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\AB3.dll
+C:\Users\Dimitrije Jovanovic\Documents\Visual Studio 2017\Projects\AB3Auth\AB3a\AB3\obj\Debug\netcoreapp2.0\AB3.pdb

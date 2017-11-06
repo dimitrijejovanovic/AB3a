@@ -26,9 +26,9 @@ namespace AB3.Controllers
         }
 
         // GET: Projects
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Project.ToListAsync());
+            return View(_context.Project.ToList());
         }
 
         // GET: Projects/Details/5
@@ -97,7 +97,7 @@ namespace AB3.Controllers
                 string[] allowedExtensions = { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" };
                 long size = projectDTO.Images.Sum(f => f.Length);
                 // full path to file in temp location
-                var filePath = @"E:\AB3Uploads\";
+                var filePath = @"F:\AB3Uploads\";
                 //for content images
                 foreach (var formFile in projectDTO.Images)
                 {
@@ -172,21 +172,25 @@ namespace AB3.Controllers
         }
 
         // GET: Projects/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var project = await _context.Project
-                .SingleOrDefaultAsync(m => m.ProjectId == id);
+            var project = _context.Project
+                .SingleOrDefault(m => m.ProjectId == id);
             if (project == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            project.IsActive = !project.IsActive;
+            _context.Project.Update(project);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Projects/Delete/5
@@ -195,7 +199,8 @@ namespace AB3.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.SingleOrDefaultAsync(m => m.ProjectId == id);
-            _context.Project.Remove(project);
+            project.IsActive = false;
+            _context.Project.Update(project);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
