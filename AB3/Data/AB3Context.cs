@@ -13,7 +13,7 @@ namespace AB3.Data
         public DbSet<Project> Project { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<Category> Category { get; set; }
-       // public DbSet<ProjectCategory> ProjectCategory { get; set; }
+        public DbSet<ProjectCategory> ProjectCategory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

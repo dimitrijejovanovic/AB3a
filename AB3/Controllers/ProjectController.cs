@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Http;
 using AB3.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace AB3.Controllers
 {
@@ -19,6 +21,8 @@ namespace AB3.Controllers
     public class ProjectsController : Controller
     {
         private readonly AB3Context _context;
+
+        private readonly IHostingEnvironment _appEnvironment;
 
         public ProjectsController(AB3Context context)
         {
@@ -39,8 +43,13 @@ namespace AB3.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project
-                .SingleOrDefaultAsync(m => m.ProjectId == id);
+
+            var project = _context.Project
+                       .Include(m => m.ProjectCategories)
+                       .ThenInclude(pc => pc.Category)
+                       .Include(m => m.Images)
+                       .Single(m => m.ProjectId == id);
+
             if (project == null)
             {
                 return NotFound();
@@ -64,60 +73,100 @@ namespace AB3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateProjectDTO projectDTO)
+        public async Task<IActionResult> Create(ProjectDTO projectDTO)
         {
             Project project = new Project();
             if (ModelState.IsValid)
             {
-                project.Name = projectDTO.Name;
-                project.Description = projectDTO.Description;
-                project.Price = projectDTO.Price;
-                project.UnitsInStock = projectDTO.UnitsInStock;
-                project.Year = projectDTO.Year;
-
-                _context.Add(project);
-                _context.SaveChanges();
-                var lastProject = _context.Project.First(p => p.Name.Equals(projectDTO.Name));
-                //categories part
-                if (projectDTO.Categories != null && projectDTO.Categories.Count > 0)
+                try
                 {
-                    project.ProjectCategories = new List<ProjectCategory>();
-                    foreach (var cat in projectDTO.Categories)
-                    {
-                        var category = _context.Category.First(c => c.CategoryName.Equals(cat));
-
-                        var projectCatogory = new ProjectCategory();
-                        projectCatogory.Project = lastProject;
-                        projectCatogory.Category = category;
-                        _context.Add(projectCatogory);
-                        _context.SaveChanges();
-                    }
+                    PopulateProject(projectDTO, project);
+                    await _context.Project.AddAsync(project);
+                    await _context.SaveChangesAsync();
                 }
-                //image part
-                string[] allowedExtensions = { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" };
-                long size = projectDTO.Images.Sum(f => f.Length);
-                // full path to file in temp location
-                var filePath = @"F:\AB3Uploads\";
-                //for content images
-                foreach (var formFile in projectDTO.Images)
+                catch (Exception ex)
                 {
-                    if (formFile.Length > 0)
-                        if (!UploadImage(formFile, filePath, false, lastProject, allowedExtensions))
-                        {
-                            var error = "You can upload only image files.";
-                            return RedirectToAction("Create", new { uploadError = error });
-                        }
+                    return RedirectToAction("Create", new { uploadError = ex.Message });
                 }
-                //for cover
-                if (projectDTO.CoverImage.Length > 0)
-                    if (!UploadImage(projectDTO.CoverImage, filePath, true, lastProject, allowedExtensions))
-                    {
-                        var error = "You can upload only image files.";
-                        return RedirectToAction("Create", new { uploadError = error });
-                    }
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Create));
+        }
+
+        private async void PopulateProject(ProjectDTO projectDTO, Project project)
+        {
+            project.Name = projectDTO.Name;
+            project.Description = projectDTO.Description;
+            project.Price = projectDTO.Price;
+            project.UnitsInStock = projectDTO.UnitsInStock;
+            project.Year = projectDTO.Year;
+
+            //categories part
+            _context.ProjectCategory.RemoveRange(_context.ProjectCategory.Where(pc => pc.Project == project));
+            _context.SaveChanges();
+
+            if (projectDTO.Categories != null && projectDTO.Categories.Count > 0)
+                project.ProjectCategories = new List<ProjectCategory>();
+            {
+                foreach (var cat in projectDTO.Categories)
+                {
+                    var category = _context.Category.First(c => c.CategoryName.Equals(cat));
+                    var projectCatogory = new ProjectCategory
+                    {
+                        Project = project,
+                        Category = category
+                    };
+                    // if (_context.ProjectCategory.FirstOrDefault(pc => pc == projectCatogory) == null)
+                    project.ProjectCategories.Add(projectCatogory);
+                }
+            }
+
+            //image part
+            //allowing update of images
+            if (project.Images != null)
+            {
+                if (projectDTO.FileCoverImage != null)
+                {
+                    project.Images.Remove(
+                        project.Images.SingleOrDefault(i => i.IsCover));
+                }
+                if (projectDTO.FileContentImages != null)
+                {
+
+                    for (int i = 0; i < project.Images.Count; i++)
+                    {
+                        if (!project.Images.ToList()[i].IsCover)
+                            project.Images.RemoveAt(i);
+                    }
+
+                }
+
+            }
+            //create new
+            else
+            {
+                project.Images = new List<Image>();
+            }
+
+            string[] allowedExtensions = { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" };
+            // full path to file in temp location
+            var filePath = "wwwroot/images/uploads/";
+            //for content images
+            if (projectDTO.FileContentImages != null && projectDTO.FileContentImages.Count > 0)
+                foreach (var formFile in projectDTO.FileContentImages)
+                {
+                    if (formFile.Length > 0)
+                        if (!UploadImage(formFile, filePath, false, project, allowedExtensions))
+                        {
+                            throw new Exception("You can upload only image files.");
+                        }
+                }
+            //for cover
+            if (projectDTO.FileCoverImage != null && projectDTO.FileCoverImage.Length > 0)
+                if (!UploadImage(projectDTO.FileCoverImage, filePath, true, project, allowedExtensions))
+                {
+                    throw new Exception("You can upload only image files.");
+                }
         }
 
         // GET: Projects/Edit/5
@@ -128,12 +177,22 @@ namespace AB3.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.ProjectId == id);
+            //jebem ti retardirani entiti u sve rupe
+            var project = _context.Project
+                .Include(m => m.ProjectCategories)
+                .ThenInclude(pc => pc.Category)
+                .Include(m => m.Images)
+                .SingleOrDefault(m => m.ProjectId == id);
+
             if (project == null)
             {
                 return NotFound();
             }
-            return View(project);
+
+            ProjectDTO projectDTO = new ProjectDTO(project);
+
+            ViewBag.Categories = _context.Category.ToList();
+            return View(projectDTO);
         }
 
         // POST: Projects/Edit/5
@@ -141,34 +200,37 @@ namespace AB3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Year,CreationDate,IsActive,ViewCount,Price,UnitsInStock")] Project project)
+        public async Task<IActionResult> Edit(int? id, ProjectDTO projectDTO)
         {
-            if (id != project.ProjectId)
+            if (id == null)
             {
                 return NotFound();
             }
-
+            ViewBag.Categories = _context.Category.ToList();
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var project = _context.Project
+                        .Include(m => m.ProjectCategories)
+                        .ThenInclude(pc => pc.Category)
+                        .Include(m => m.Images)
+                        .Single(m => m.ProjectId == id);
+
+                    PopulateProject(projectDTO, project);
+
                     _context.Update(project);
                     await _context.SaveChangesAsync();
+                    projectDTO = new ProjectDTO(project);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!ProjectExists(project.ProjectId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ViewBag.Error = ex.Message;
+                    return View(projectDTO);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(project);
+            return View(projectDTO);
         }
 
         // GET: Projects/Delete/5
@@ -225,12 +287,15 @@ namespace AB3.Controllers
                 {
                     file.CopyTo(stream);
                     Image image = new Image();
-                    image.ImageName = guid;
+                    image.ImageName = guid + "." + extension;
                     image.Src = path;
                     image.Project = project;
                     image.IsCover = isCover;
-                    _context.Add(image);
-                    _context.SaveChanges();
+
+                    project.Images.Add(image);
+
+                    //_context.Image.Add(image);
+                    //_context.SaveChanges();
                     return true;
                 }
             else

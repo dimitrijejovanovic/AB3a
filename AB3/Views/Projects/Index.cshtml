@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>All projects</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-danger" >Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -52,13 +52,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
                 </td>
-                <td>
-                    @foreach (var pc in item.ProjectCategories)
+                @*<td>
+                    @if (item.ProjectCategories != null && item.ProjectCategories.Count > 0)
                     {
-                        @Html.DisplayFor(modelItem => pc.Category.CategoryName + " ")
+                        foreach (var pc in item.ProjectCategories)
+                        {
+                            @Html.DisplayFor(modelItem => pc.Category.CategoryName + " ")
+                        }
+
                     }
-                    
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationDate)
                 </td>

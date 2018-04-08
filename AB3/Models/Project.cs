@@ -13,8 +13,8 @@ namespace AB3.Models
         public string Description { get; set; }
         public string Year { get; set; }
         public DateTime? CreationDate { get; set; }
-        public virtual ICollection<ProjectCategory> ProjectCategories { get; set; }
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual IList<ProjectCategory> ProjectCategories { get; set; }
+        public virtual IList<Image> Images { get; set; }
         public bool IsActive { get; set; }
         public int ViewCount { get; set; }
         public Double Price { get; set; }
@@ -32,8 +32,8 @@ namespace AB3.Models
         public Project(string name = "Untitled",
                        string desc = null,
                        string year = null,
-                       ICollection<ProjectCategory> cats = null,
-                       ICollection<Image> imgs = null,
+                       IList<ProjectCategory> cats = null,
+                       IList<Image> imgs = null,
                        Double prc = 0.0,
                        int uis = 0)
         {

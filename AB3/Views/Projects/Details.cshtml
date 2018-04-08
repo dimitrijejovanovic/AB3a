@@ -1,27 +1,40 @@
-﻿@model ABPort.Models.Project
+﻿@model AB3.Models.Project
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
 
 <div>
-    <h4>Project</h4>
+    <h4>Project details</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
+        <dt>
+            Categories
+        </dt>
+        <dd>
+            @{
+                string allCategories = "";
+
+                for (int i = 0; i < Model.ProjectCategories.Count; i++)
+                {
+                    allCategories = allCategories + Model.ProjectCategories[i].Category.CategoryName;
+                    if (i < Model.ProjectCategories.Count - 1)
+                    {
+                        allCategories = allCategories + " | ";
+                    }
+                }
+            }
+            @allCategories
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Year)
         </dt>
@@ -57,6 +70,38 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.UnitsInStock)
+        </dd>
+
+        <dt>
+            Cover
+        </dt>
+        <dd>
+            <div class="content-image-details-container">
+                @foreach (var item in Model.Images)
+                {
+                    if (item.IsCover)
+                    {
+                        <img src="~/images/uploads/@item.ImageName" alt="@item.ImageName" class="content-image-details" />
+                    }
+                }
+            </div>
+            <div class="clear"></div>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Images)
+        </dt>
+        <dd>
+            <div class="content-image-details-container">
+                @foreach (var item in Model.Images)
+                {
+                    if (!item.IsCover)
+                    {
+                        <img src="~/images/uploads/@item.ImageName" alt="@item.ImageName" class="content-image-details" />
+                    }
+                }
+            </div>
+            <div class="clear"></div>
         </dd>
     </dl>
 </div>
