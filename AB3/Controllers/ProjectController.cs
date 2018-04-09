@@ -12,8 +12,6 @@ using Microsoft.AspNetCore.Http;
 using AB3.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace AB3.Controllers
 {
@@ -21,8 +19,6 @@ namespace AB3.Controllers
     public class ProjectsController : Controller
     {
         private readonly AB3Context _context;
-
-        private readonly IHostingEnvironment _appEnvironment;
 
         public ProjectsController(AB3Context context)
         {
@@ -42,7 +38,6 @@ namespace AB3.Controllers
             {
                 return NotFound();
             }
-
 
             var project = _context.Project
                        .Include(m => m.ProjectCategories)
@@ -93,81 +88,7 @@ namespace AB3.Controllers
             return RedirectToAction(nameof(Create));
         }
 
-        private async void PopulateProject(ProjectDTO projectDTO, Project project)
-        {
-            project.Name = projectDTO.Name;
-            project.Description = projectDTO.Description;
-            project.Price = projectDTO.Price;
-            project.UnitsInStock = projectDTO.UnitsInStock;
-            project.Year = projectDTO.Year;
-
-            //categories part
-            _context.ProjectCategory.RemoveRange(_context.ProjectCategory.Where(pc => pc.Project == project));
-            _context.SaveChanges();
-
-            if (projectDTO.Categories != null && projectDTO.Categories.Count > 0)
-                project.ProjectCategories = new List<ProjectCategory>();
-            {
-                foreach (var cat in projectDTO.Categories)
-                {
-                    var category = _context.Category.First(c => c.CategoryName.Equals(cat));
-                    var projectCatogory = new ProjectCategory
-                    {
-                        Project = project,
-                        Category = category
-                    };
-                    // if (_context.ProjectCategory.FirstOrDefault(pc => pc == projectCatogory) == null)
-                    project.ProjectCategories.Add(projectCatogory);
-                }
-            }
-
-            //image part
-            //allowing update of images
-            if (project.Images != null)
-            {
-                if (projectDTO.FileCoverImage != null)
-                {
-                    project.Images.Remove(
-                        project.Images.SingleOrDefault(i => i.IsCover));
-                }
-                if (projectDTO.FileContentImages != null)
-                {
-
-                    for (int i = 0; i < project.Images.Count; i++)
-                    {
-                        if (!project.Images.ToList()[i].IsCover)
-                            project.Images.RemoveAt(i);
-                    }
-
-                }
-
-            }
-            //create new
-            else
-            {
-                project.Images = new List<Image>();
-            }
-
-            string[] allowedExtensions = { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" };
-            // full path to file in temp location
-            var filePath = "wwwroot/images/uploads/";
-            //for content images
-            if (projectDTO.FileContentImages != null && projectDTO.FileContentImages.Count > 0)
-                foreach (var formFile in projectDTO.FileContentImages)
-                {
-                    if (formFile.Length > 0)
-                        if (!UploadImage(formFile, filePath, false, project, allowedExtensions))
-                        {
-                            throw new Exception("You can upload only image files.");
-                        }
-                }
-            //for cover
-            if (projectDTO.FileCoverImage != null && projectDTO.FileCoverImage.Length > 0)
-                if (!UploadImage(projectDTO.FileCoverImage, filePath, true, project, allowedExtensions))
-                {
-                    throw new Exception("You can upload only image files.");
-                }
-        }
+       
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -265,6 +186,82 @@ namespace AB3.Controllers
             _context.Project.Update(project);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private async void PopulateProject(ProjectDTO projectDTO, Project project)
+        {
+            project.Name = projectDTO.Name;
+            project.Description = projectDTO.Description;
+            project.Price = projectDTO.Price;
+            project.UnitsInStock = projectDTO.UnitsInStock;
+            project.Year = projectDTO.Year;
+
+            //categories part
+            _context.ProjectCategory.RemoveRange(_context.ProjectCategory.Where(pc => pc.Project == project));
+            _context.SaveChanges();
+
+            if (projectDTO.Categories != null && projectDTO.Categories.Count > 0)
+                project.ProjectCategories = new List<ProjectCategory>();
+            {
+                foreach (var cat in projectDTO.Categories)
+                {
+                    var category = _context.Category.First(c => c.CategoryName.Equals(cat));
+                    var projectCatogory = new ProjectCategory
+                    {
+                        Project = project,
+                        Category = category
+                    };
+                    // if (_context.ProjectCategory.FirstOrDefault(pc => pc == projectCatogory) == null)
+                    project.ProjectCategories.Add(projectCatogory);
+                }
+            }
+
+            //image part
+            //allowing update of images
+            if (project.Images != null)
+            {
+                if (projectDTO.FileCoverImage != null)
+                {
+                    project.Images.Remove(
+                        project.Images.SingleOrDefault(i => i.IsCover));
+                }
+                if (projectDTO.FileContentImages != null)
+                {
+
+                    for (int i = 0; i < project.Images.Count; i++)
+                    {
+                        if (!project.Images.ToList()[i].IsCover)
+                            project.Images.RemoveAt(i);
+                    }
+
+                }
+
+            }
+            //create new
+            else
+            {
+                project.Images = new List<Image>();
+            }
+
+            string[] allowedExtensions = { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" };
+            // full path to file in temp location
+            var filePath = "wwwroot/images/uploads/";
+            //for content images
+            if (projectDTO.FileContentImages != null && projectDTO.FileContentImages.Count > 0)
+                foreach (var formFile in projectDTO.FileContentImages)
+                {
+                    if (formFile.Length > 0)
+                        if (!UploadImage(formFile, filePath, false, project, allowedExtensions))
+                        {
+                            throw new Exception("You can upload only image files.");
+                        }
+                }
+            //for cover
+            if (projectDTO.FileCoverImage != null && projectDTO.FileCoverImage.Length > 0)
+                if (!UploadImage(projectDTO.FileCoverImage, filePath, true, project, allowedExtensions))
+                {
+                    throw new Exception("You can upload only image files.");
+                }
         }
 
         private bool ProjectExists(int id)

@@ -33,9 +33,12 @@ li {
   text-align: center;
 }
 
+.menu-link:hover{
+    background-color: rgba(0, 0, 0, 0) !important;
+}
 .navbar-nav > li {
-  display: inline-block;
-  float: none;
+    display: inline-block;
+    float: none;
 }
 
 #menu-home {
@@ -139,9 +142,6 @@ li {
   background-image: url("../images/shop_ver1_02.png");
 }
 
-.container {
-  margin-left: 30%;
-}
 
 #contact-panel {
     display: none;
@@ -175,5 +175,36 @@ li {
 
 .clear{
     clear: both;
+}
+
+.footer-images{
+    margin: 40px 40px 10px 0px;
+}
+
+.cover-image-wrapper {
+    
+    text-align: center;
+    overflow: hidden;
+    padding: 30px;
+}
+
+.cover-image {
+    background: lightblue;
+    width: 100%;
+   
+}
+
+.body-content{
+    min-width: 40%;
+    max-width: 60%;
+}
+
+.account-bar{
+    margin: 30px 0 30px 0;
+}
+
+.project-images{
+    max-width: 100%;
+    margin-bottom:30px;
 }
 

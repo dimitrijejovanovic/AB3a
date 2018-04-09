@@ -1,0 +1,23 @@
+﻿@model List<AB3.Models.Project>
+
+
+<div class ="row">
+
+
+    @foreach (var project in Model)
+    {
+        foreach (var image in project.Images)
+        {
+            if (image.IsCover)
+            {
+                <div class="col-xs-6 col-md-4 cover-image-wrapper">
+                    <a asp-controller="Home" asp-action="Project" asp-route-id="@project.ProjectId">
+                        <img src="~/images/uploads/@image.ImageName" alt="@image.ImageName" class="cover-image"/>
+                    </a>
+                </div>
+
+            }
+        }
+
+    }
+    </div>

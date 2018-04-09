@@ -1,0 +1,26 @@
+﻿@model AB3.Models.Project
+
+<div class="row">
+
+    <div class="col-md-6 col-xs-12 right">
+        <div class="project-desc">
+            @Model.Name
+            <br>
+            @Model.Description
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xs-12 right">
+        @foreach (var image in Model.Images)
+        {
+            if (!image.IsCover)
+            {
+                <div class="project-images">
+                        <img src="~/images/uploads/@image.ImageName" alt="@image.ImageName" class="cover-image" />
+                </div>
+
+            }
+        }
+    </div>
+
+</div>
